@@ -38,7 +38,7 @@ if [ ! -d "bin" ]; then
     mkdir -p bin
 fi
 
-echo -----> Add backup script to app/bin"
+echo "-----> Add backup script to app/bin"
 cp "$BUILDPACK_DIR/backup.sh" $BUILD_DIR/bin/
 
-echo -----> backup script moved"
+echo "-----> backup script moved"
