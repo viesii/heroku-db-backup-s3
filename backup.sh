@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DBNAME=""
-EXPIRATION="1"
+EXPIRATION="30"
 Green='\033[0;32m'
 EC='\033[0m' 
 FILENAME=`date +%H_%M_%d%m%Y`
@@ -54,8 +54,11 @@ fi
 printf "${Green}Start dump${EC}"
 time pg_dump $DBURL_FOR_BACKUP | gzip >  /tmp/"${DBNAME}_${FILENAME}".gz
 
+#EXPIRATION_DATE=$(date -v +"2d" +"%Y-%m-%dT%H:%M:%SZ") #for MAC
+EXPIRATION_DATE=$(date -d "$EXPIRATION days" +"%Y-%m-%dT%H:%M:%SZ")
+
 printf "${Green}Move dump to AWS${EC}"
-time /app/vendor/awscli/bin/aws s3 cp /tmp/"${DBNAME}_${FILENAME}".gz s3://$S3_BUCKET_PATH/$DBNAME/"${DBNAME}_${FILENAME}".gz
+time /app/vendor/awscli/bin/aws s3 cp /tmp/"${DBNAME}_${FILENAME}".gz s3://$S3_BUCKET_PATH/$DBNAME/"${DBNAME}_${FILENAME}".gz --expires $EXPIRATION_DATE
 
 # cleaning after all
 rm -rf /tmp/"${DBNAME}_${FILENAME}".gz
