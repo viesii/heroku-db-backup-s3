@@ -34,11 +34,11 @@ rm -rf /tmp/awscli*
 
 echo "-----> aws cli installation done"
 
-if [ ! -d "bin" ]; then
-    mkdir -p bin
+if [ ! -d "vendor" ]; then
+    mkdir -p vendor
 fi
 
-echo "-----> Add backup script to app/bin"
-cp "$BUILDPACK_DIR/backup.sh" $BUILD_DIR/bin/
+echo "-----> Add backup script to app/vendor"
+cp "$BUILDPACK_DIR/backup.sh" $BUILD_DIR/vendor/
 
 echo "-----> backup script moved"
