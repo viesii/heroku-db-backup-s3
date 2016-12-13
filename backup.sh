@@ -3,7 +3,7 @@
 DBNAME=""
 EXPIRATION="1"
 Green='\033[0;32m'
-EC='\033[0m' # reset color
+EC='\033[0m' 
 FILENAME=`date +%H_%M_%d%m%Y`
 
 # terminate script on any fails
