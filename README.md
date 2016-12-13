@@ -1,12 +1,10 @@
-Another bash script to capture Postgress DB in Heroku and copy it to s3 bucket. This script supposed to be part of your application and should be located in vendor directory from application root.
+## Heroku Buildpack: heroku-db-backup-s3
+Capture Postgress DB in Heroku and copy it to s3 bucket. Buildpack contains AWS CLI.
 
-## Installation
-Put `backup.sh` file to your project folder `vendor`
-
-### Script dependencies
-To use awscli we need to add buildpack -  [Heroku buildpack: AWS CLI](https://github.com/odedlaz/heroku-buildpack-awscli) to your project 
+### Installation
+Add buildpack to your Heroku app
 ```
-heroku buildpacks:add https://github.com/odedlaz/heroku-buildpack-awscli --app <your_app>
+heroku buildpacks:add https://github.com/devsenexx/heroku-db-backup-s3 --app <your_app>
 ```
 > Buildpacks are scripts that are run when your app is deployed.
 
