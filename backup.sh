@@ -1,5 +1,6 @@
 #!/bin/bash
 
+PYTHONHOME=/app/vendor/awscli/
 DBNAME=""
 EXPIRATION="30"
 Green='\033[0;32m'
