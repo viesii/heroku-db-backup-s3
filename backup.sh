@@ -63,13 +63,13 @@ printf "${Green}Start dump${EC}"
 # curl --progress-bar -o /tmp/"${DBNAME}_${FILENAME}" $BACKUP_URL
 # gzip /tmp/"${DBNAME}_${FILENAME}"
 
-time pg_dump $DBURL_FOR_BACKUP | gzip | openssl enc -aes-256-cbc -e -passin "env:DB_BACKUP_ENC_KEY" >  /tmp/"${DBNAME}_${FILENAME}".gz
+time pg_dump $DBURL_FOR_BACKUP | gzip | openssl enc -aes-256-cbc -e -passin "env:DB_BACKUP_ENC_KEY" >  /tmp/"${DBNAME}_${FILENAME}".gz.enc
 
 #EXPIRATION_DATE=$(date -v +"2d" +"%Y-%m-%dT%H:%M:%SZ") #for MAC
 EXPIRATION_DATE=$(date -d "$EXPIRATION days" +"%Y-%m-%dT%H:%M:%SZ")
 
 printf "${Green}Move dump to AWS${EC}"
-time /app/vendor/awscli/bin/aws s3 cp /tmp/"${DBNAME}_${FILENAME}".gz s3://$S3_BUCKET_PATH/$DBNAME/"${DBNAME}_${FILENAME}".gz --expires $EXPIRATION_DATE
+time /app/vendor/awscli/bin/aws s3 cp /tmp/"${DBNAME}_${FILENAME}".gz.enc s3://$S3_BUCKET_PATH/$DBNAME/"${DBNAME}_${FILENAME}".gz.enc --expires $EXPIRATION_DATE
 
 # cleaning after all
-rm -rf /tmp/"${DBNAME}_${FILENAME}".gz
+rm -rf /tmp/"${DBNAME}_${FILENAME}".gz.enc
