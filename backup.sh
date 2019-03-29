@@ -50,6 +50,10 @@ if [[ -z "$DBURL_FOR_BACKUP" ]]; then
   echo "Missing DBURL_FOR_BACKUP variable"
   exit 1
 fi
+if [[ -z "$DB_BACKUP_ENC_KEY" ]]; then
+  echo "Missing DB_BACKUP_ENC_KEY variable"
+  exit 1
+fi
 
 printf "${Green}Start dump${EC}"
 # Maybe in next 'version' use heroku-toolbelt
@@ -58,7 +62,7 @@ printf "${Green}Start dump${EC}"
 # curl --progress-bar -o /tmp/"${DBNAME}_${FILENAME}" $BACKUP_URL
 # gzip /tmp/"${DBNAME}_${FILENAME}"
 
-time pg_dump $DBURL_FOR_BACKUP | gzip >  /tmp/"${DBNAME}_${FILENAME}".gz
+time pg_dump $DBURL_FOR_BACKUP | gzip | openssl enc -aes-256-cbc -e -pass "pass:${DB_BACKUP_ENC_KEY}" >  /tmp/"${DBNAME}_${FILENAME}".gz
 
 #EXPIRATION_DATE=$(date -v +"2d" +"%Y-%m-%dT%H:%M:%SZ") #for MAC
 EXPIRATION_DATE=$(date -d "$EXPIRATION days" +"%Y-%m-%dT%H:%M:%SZ")
