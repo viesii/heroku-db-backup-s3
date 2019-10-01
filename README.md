@@ -22,11 +22,20 @@ $ heroku config:add HEROKU_TOOLBELT_APP=<your_app> --app <your_app>
 $ heroku config:add HEROKU_TOOLBELT_API_EMAIL=sss --app <your_app>
 $ heroku config:add HEROKU_TOOLBELT_API_PASSWORD=ddd --app <your_app>
 ```
-For Postgres:
+
+#### For Postgres:
 
 Go to settings page of your Heroku application and add Config Var `DBURL_FOR_BACKUP` with the same value as var `DATABASE_URL`. This is our DB connection string.
 
-For MySQL:
+#### For MySQL:
+
+You will need to install a mysql buildpack to make the `mysqldump` command available. For example:
+
+```
+$ heroku buildpacks:add https://github.com/daetherius/heroku-buildpack-mysql --app <your_app>
+```
+
+Then configure the following:
 
 ```
 $ heroku config:add DB_BACKUP_HOST=your-db-host --app <your_app>
@@ -35,14 +44,22 @@ $ heroku config:add DB_BACKUP_PASSWORD=your-db-password --app <your_app>
 $ heroku config:add DB_BACKUP_DATABASE=your-db-name --app <your_app>
 ```
 
+### One-time runs
+
+You can run the backup task as a one-time task:
+
+```
+$ heroku run bash /app/vendor/backup.sh -db <somedbname> --app <your_app>
+```
+
 ### Scheduler
 Add addon scheduler to your app.
 ```
-heroku addons:create scheduler --app <your_app>
+$ heroku addons:create scheduler --app <your_app>
 ```
 Create scheduler.
 ```
-heroku addons:open scheduler --app <your_app>
+$ heroku addons:open scheduler --app <your_app>
 ```
 Now in browser `Add new Job`.
 Paste next line:
@@ -52,6 +69,6 @@ and configure FREQUENCY. Paramenter `db` is used for naming convention when we c
 ### Doesn't work?
 In case if scheduler doesn't run your task, check logs using this e.g.:
 ```
-heroku logs -t  --app <your_app> | grep 'backup.sh'
-heroku logs --ps scheduler.x --app <you_app>
+$ heroku logs -t  --app <your_app> | grep 'backup.sh'
+$ heroku logs --ps scheduler.x --app <you_app>
 ```
