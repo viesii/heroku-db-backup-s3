@@ -79,9 +79,9 @@ printf "${Green}Start dump${EC}"
 # gzip /tmp/"${DBNAME}_${FILENAME}"
 
 if [[ $DB_BACKUP_HOST ]]; then
-  time mysqldump -h $DB_BACKUP_HOST -p$DB_BACKUP_PASSWORD -u$DB_BACKUP_USER $DB_BACKUP_DATABASE | gzip | openssl enc -aes-256-cbc -e -pass "env:DB_BACKUP_ENC_KEY" > /tmp/"${DBNAME}_${FILENAME}".gz.enc
+  mysqldump -h $DB_BACKUP_HOST -p$DB_BACKUP_PASSWORD -u$DB_BACKUP_USER $DB_BACKUP_DATABASE | gzip | openssl enc -aes-256-cbc -e -pass "env:DB_BACKUP_ENC_KEY" > /tmp/"${DBNAME}_${FILENAME}".gz.enc
 elif [[ $DBURL_FOR_BACKUP = postgres* ]]; then
-  time pg_dump $DBURL_FOR_BACKUP | gzip | openssl enc -aes-256-cbc -e -pass "env:DB_BACKUP_ENC_KEY" > /tmp/"${DBNAME}_${FILENAME}".gz.enc
+  pg_dump $DBURL_FOR_BACKUP | gzip | openssl enc -aes-256-cbc -e -pass "env:DB_BACKUP_ENC_KEY" > /tmp/"${DBNAME}_${FILENAME}".gz.enc
 else
   echo "Unknown database URL protocol. Must be mysql, mysql2 or postgres"
   exit 1;
@@ -91,7 +91,7 @@ fi;
 EXPIRATION_DATE=$(date -d "$EXPIRATION days" +"%Y-%m-%dT%H:%M:%SZ")
 
 printf "${Green}Move dump to AWS${EC}"
-AWS_ACCESS_KEY_ID=$DB_BACKUP_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DB_BACKUP_AWS_SECRET_ACCESS_KEY time /app/vendor/awscli/bin/aws --region $DB_BACKUP_AWS_DEFAULT_REGION s3 cp /tmp/"${DBNAME}_${FILENAME}".gz.enc s3://$DB_BACKUP_S3_BUCKET_PATH/$DBNAME/"${DBNAME}_${FILENAME}".gz.enc --expires $EXPIRATION_DATE
+AWS_ACCESS_KEY_ID=$DB_BACKUP_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$DB_BACKUP_AWS_SECRET_ACCESS_KEY /app/vendor/awscli/bin/aws --region $DB_BACKUP_AWS_DEFAULT_REGION s3 cp /tmp/"${DBNAME}_${FILENAME}".gz.enc s3://$DB_BACKUP_S3_BUCKET_PATH/$DBNAME/"${DBNAME}_${FILENAME}".gz.enc --expires $EXPIRATION_DATE
 
 # cleaning after all
 rm -rf /tmp/"${DBNAME}_${FILENAME}".gz.enc
