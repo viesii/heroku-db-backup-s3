@@ -75,7 +75,7 @@ $ heroku logs --ps scheduler.x --app <you_app>
 
 ### Restoring
 
-#### Can't decrype backups
+#### Can't decrypt backups
 
 Different versions of openssl can cause decryption to fail. If you receive an error when trying to decrypt, you can run an alternative version of openssl inside a Docker container, e.g:
 
