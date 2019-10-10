@@ -72,3 +72,16 @@ In case if scheduler doesn't run your task, check logs using this e.g.:
 $ heroku logs -t  --app <your_app> | grep 'backup.sh'
 $ heroku logs --ps scheduler.x --app <you_app>
 ```
+
+### Restoring
+
+#### Can't decrype backups
+
+Different versions of openssl can cause decryption to fail. If you receive an error when trying to decrypt, you can run an alternative version of openssl inside a Docker container, e.g:
+
+```bash
+$ docker run --rm -it -v /path/to/backup:/backups -w /backups alpine /bin/ash
+$$ apk add --update openssl
+$$ openssl enc -d -aes-256-cbc -in /backups/your-encrypted-backup.gz.enc -out /backups/decrypted-backup.gz
+$$ exit
+```
