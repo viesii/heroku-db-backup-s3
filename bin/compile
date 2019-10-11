@@ -38,7 +38,7 @@ if [ ! -d "vendor" ]; then
     mkdir -p vendor
 fi
 
-echo "-----> Add backup script to app/vendor"
+echo "-----> Add backup script from $BUILDPACK_DIR/backup.sh to $BUILD_DIR/vendor/"
 cp "$BUILDPACK_DIR/backup.sh" $BUILD_DIR/vendor/
 
 echo "-----> backup script moved"
