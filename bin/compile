@@ -34,6 +34,12 @@ rm -rf /tmp/awscli*
 
 echo "-----> aws cli installation done"
 
+echo "----> adding python3-venv package for aws"
+
+apt-get install -y python3-venv
+
+echo "----> finished adding python3-venv package for aws"
+
 if [ ! -d "vendor" ]; then
     mkdir -p vendor
 fi
