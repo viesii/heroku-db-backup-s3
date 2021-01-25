@@ -11,7 +11,7 @@ set -e
 unset GIT_DIR
 
 # config
-AWS_CLI_URL="https://s3.amazonaws.com/aws-cli/awscli-bundle-1.18.147.zip"
+AWS_CLI_URL="https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
 
 # parse and derive params
 BUILD_DIR=$1
@@ -21,24 +21,18 @@ LP_DIR=`cd $(dirname $0); cd ..; pwd`
 BUILDPACK_DIR="$(dirname $(dirname $0))"
 
 echo "-----> Fetching AWS CLI into slug"
-curl --progress-bar -o /tmp/awscli-bundle.zip $AWS_CLI_URL
-unzip -qq -d "$BUILD_DIR/vendor" /tmp/awscli-bundle.zip
+curl --progress-bar $AWS_CLI_URL -o "/tmp/awscliv2.zip"
 
-echo "-----> adding installer script into app/.profile.d"
-mkdir -p $BUILD_DIR/.profile.d
-cp "$BUILDPACK_DIR/bin/install_awscli.sh" $BUILD_DIR/.profile.d/
-chmod +x $BUILD_DIR/.profile.d/install_awscli.sh
+echo "-----> Installing aws binary"
+unzip -qq -d "$BUILD_DIR/vendor" /tmp/awscliv2.zip
+$BUILD_DIR/vendor/aws/install
 
 #cleaning up...
-rm -rf /tmp/awscli*
+
+echo "-----> Cleaning up"
+rm -rf /tmp/awscli* $BUILD_DIR/vendor/aws
 
 echo "-----> aws cli installation done"
-
-echo "----> adding python3-venv package for aws"
-
-apt-get install -y python3-venv
-
-echo "----> finished adding python3-venv package for aws"
 
 if [ ! -d "vendor" ]; then
     mkdir -p vendor
