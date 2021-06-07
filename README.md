@@ -14,13 +14,8 @@ $ heroku config:add DB_BACKUP_AWS_ACCESS_KEY_ID=someaccesskey --app <your_app>
 $ heroku config:add DB_BACKUP_AWS_SECRET_ACCESS_KEY=supermegasecret --app <your_app>
 $ heroku config:add DB_BACKUP_AWS_DEFAULT_REGION=eu-central-1 --app <your_app>
 $ heroku config:add DB_BACKUP_S3_BUCKET_PATH=your-bucket --app <your_app>
-$ heroku config:add DB_BACKUP_ENC_KEY=somethingverysecret --app <your_app>
-```
-- In future release (maybe) will use heroku-toolbelt
-```
-$ heroku config:add HEROKU_TOOLBELT_APP=<your_app> --app <your_app>
-$ heroku config:add HEROKU_TOOLBELT_API_EMAIL=sss --app <your_app>
-$ heroku config:add HEROKU_TOOLBELT_API_PASSWORD=ddd --app <your_app>
+$ heroku config:add DB_BACKUP_GPG_PUB_KEY=public_key_armor_export --app <your_app>
+$ heroku config:add DB_BACKUP_GPG_PUB_KEY_ID=gpg_recipient --app <your_app>
 ```
 
 #### For Postgres:
@@ -75,13 +70,6 @@ $ heroku logs --ps scheduler.x --app <you_app>
 
 ### Restoring
 
-#### Can't decrypt backups
-
-Different versions of openssl can cause decryption to fail. If you receive an error when trying to decrypt, you can run an alternative version of openssl inside a Docker container, e.g:
-
 ```bash
-$ docker run --rm -it -v /path/to/backup:/backups -w /backups alpine /bin/ash
-$$ apk add --update openssl
-$$ openssl enc -d -aes-256-cbc -in /backups/your-encrypted-backup.gz.enc -out /backups/decrypted-backup.gz
-$$ exit
+$ gpg --decrypt filename
 ```
