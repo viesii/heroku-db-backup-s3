@@ -45,9 +45,9 @@ if [[ $DATABASE_URL = mysql* ]]; then
   DB_BACKUP_PASSWORD=$(echo $DATABASE_URL | cut -d: -f3 | cut -d@ -f1)
   DB_BACKUP_HOST=$(echo $DATABASE_URL | cut -d@ -f2 | cut -d: -f1)
   DB_BACKUP_DATABASE=$(echo $DATABASE_URL | cut -d/ -f4)
-  mysqldump -h $DB_BACKUP_HOST -p$DB_BACKUP_PASSWORD -u$DB_BACKUP_USER $DB_BACKUP_DATABASE | gpg --encrypt --recipient "$DB_BACKUP_GPG_PUB_KEY_ID" --output "$TMP_BACKUP"
+  mysqldump -h $DB_BACKUP_HOST -p$DB_BACKUP_PASSWORD -u$DB_BACKUP_USER $DB_BACKUP_DATABASE | gpg --encrypt --recipient "$DB_BACKUP_GPG_PUB_KEY_ID" --output "$TMP_BACKUP" --trust-model always
 elif [[ $DATABASE_URL = postgres* ]]; then
-  pg_dump $DBURL_FOR_BACKUP | gpg --encrypt --recipient "$DB_BACKUP_GPG_PUB_KEY_ID" --output "$TMP_BACKUP"
+  pg_dump $DBURL_FOR_BACKUP | gpg --encrypt --recipient "$DB_BACKUP_GPG_PUB_KEY_ID" --output "$TMP_BACKUP" --trust-model always
 else
   echo "Unknown database URL protocol. Must be mysql, mysql2 or postgres"
   exit 1;
