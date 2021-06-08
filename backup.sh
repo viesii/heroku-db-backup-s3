@@ -54,7 +54,7 @@ if [[ $DATABASE_URL = mysql* ]]; then
 elif [[ $DATABASE_URL = postgres* ]]; then
   TMP_BACKUP=/tmp/"${DB_BACKUP_FILENAME}_postgresql_${DATE}".gpg
 
-  pg_dump $DBURL_FOR_BACKUP | gpg --encrypt --recipient "$DB_BACKUP_GPG_PUB_KEY_ID" --output "$TMP_BACKUP" --trust-model always
+  pg_dump $DATABASE_URL | gpg --encrypt --recipient "$DB_BACKUP_GPG_PUB_KEY_ID" --output "$TMP_BACKUP" --trust-model always
 else
   echo "Unknown database URL protocol. Must be mysql, mysql2 or postgres"
   exit 1;
