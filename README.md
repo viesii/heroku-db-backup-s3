@@ -9,6 +9,7 @@ heroku buildpacks:add --index 1 https://github.com/abtion/heroku-db-backup-s3 --
 
 ### Configure environment variables
 ```
+$ heroku config:add DB_BACKUP_FILENAME=some_name --app <your_app>
 $ heroku config:add DB_BACKUP_AWS_ACCESS_KEY_ID=someaccesskey --app <your_app>
 $ heroku config:add DB_BACKUP_AWS_SECRET_ACCESS_KEY=supermegasecret --app <your_app>
 $ heroku config:add DB_BACKUP_AWS_DEFAULT_REGION=eu-central-1 --app <your_app>
