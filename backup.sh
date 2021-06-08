@@ -3,10 +3,15 @@
 PYTHONHOME=/app/vendor/awscli/
 Green='\033[0;32m'
 EC='\033[0m'
-FILENAME=`date +%Y%m%d_%H_%M`
+DATE=`date +%Y%m%d_%H_%M`
 
 # terminate script on any fails
 set -e
+
+if [[ -z "$DB_BACKUP_FILENAME" ]]; then
+  echo "Missing DB_BACKUP_FILENAME variable"
+  exit 1
+fi
 
 if [[ -z "$DB_BACKUP_AWS_ACCESS_KEY_ID" ]]; then
   echo "Missing DB_BACKUP_AWS_ACCESS_KEY_ID variable"
@@ -39,7 +44,7 @@ gpg --import gpg-pubkey
 
 printf "${Green}Start dump${EC}"
 if [[ $DATABASE_URL = mysql* ]]; then
-  TMP_BACKUP=/tmp/"mysql_${FILENAME}".gpg
+  TMP_BACKUP=/tmp/"${DB_BACKUP_FILENAME}_mysql_${DATE}".gpg
 
   DB_BACKUP_USER=$(echo $DATABASE_URL | cut -d/ -f3 | cut -d: -f1)
   DB_BACKUP_PASSWORD=$(echo $DATABASE_URL | cut -d: -f3 | cut -d@ -f1)
@@ -47,7 +52,7 @@ if [[ $DATABASE_URL = mysql* ]]; then
   DB_BACKUP_DATABASE=$(echo $DATABASE_URL | cut -d/ -f4)
   mysqldump -h $DB_BACKUP_HOST -p$DB_BACKUP_PASSWORD -u$DB_BACKUP_USER $DB_BACKUP_DATABASE | gpg --encrypt --recipient "$DB_BACKUP_GPG_PUB_KEY_ID" --output "$TMP_BACKUP" --trust-model always
 elif [[ $DATABASE_URL = postgres* ]]; then
-  TMP_BACKUP=/tmp/"postgresql_${FILENAME}".gpg
+  TMP_BACKUP=/tmp/"${DB_BACKUP_FILENAME}_postgresql_${DATE}".gpg
 
   pg_dump $DBURL_FOR_BACKUP | gpg --encrypt --recipient "$DB_BACKUP_GPG_PUB_KEY_ID" --output "$TMP_BACKUP" --trust-model always
 else
