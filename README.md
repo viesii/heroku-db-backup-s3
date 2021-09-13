@@ -9,7 +9,7 @@ $ heroku config:add DB_BACKUP_FILENAME=client_name-postgres --app <your_app>
 $ heroku config:add DB_BACKUP_AWS_ACCESS_KEY_ID=someaccesskey --app <your_app>
 $ heroku config:add DB_BACKUP_AWS_SECRET_ACCESS_KEY=supermegasecret --app <your_app>
 $ heroku config:add DB_BACKUP_AWS_DEFAULT_REGION=eu-central-1 --app <your_app>
-$ heroku config:add DB_BACKUP_S3_BUCKET_PATH=abtion-backups --app <your_app>
+$ heroku config:add DB_BACKUP_S3_BUCKET_PATH=bucket-name --app <your_app>
 $ heroku config:add DB_BACKUP_GPG_PUB_KEY=public_key_armor_export --app <your_app>
 $ heroku config:add DB_BACKUP_GPG_PUB_KEY_ID=gpg_recipient --app <your_app>
 ```
