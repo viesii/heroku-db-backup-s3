@@ -1,11 +1,7 @@
-## Heroku Buildpack: heroku-db-backup-s3
+# Heroku Buildpack: heroku-db-backup-s3
 Capture Postgres or MySQL DB in Heroku, encrypt it with GPG and copy it to s3 bucket. Buildpack contains AWS CLI.
 
-### Installation
-Add buildpack to your Heroku app
-```
-heroku buildpacks:add --index 1 https://github.com/abtion/heroku-db-backup-s3 --app <your_app>
-```
+## Installation
 
 ### Configure environment variables
 ```
@@ -19,11 +15,16 @@ $ heroku config:add DB_BACKUP_GPG_PUB_KEY_ID=gpg_recipient --app <your_app>
 ```
 It uses `DATABASE_URL` as the database to be backed up.
 
-#### For Postgres:
+### Add buildpack to your Heroku app
+```
+heroku buildpacks:add --index 1 https://github.com/abtion/heroku-db-backup-s3 --app <your_app>
+```
+
+### For Postgres:
 
 Works out of the box
 
-#### For MySQL:
+### For MySQL:
 
 You will need to install a mysql buildpack to make the `mysqldump` command available. For example:
 
@@ -34,14 +35,6 @@ In your project root file
 
 ```
 $ echo "mysql-client" > Aptfile
-```
-
-### One-time runs
-
-You can run the backup task as a one-time task:
-
-```
-$ heroku run bash /app/vendor/backup.sh --app <your_app>
 ```
 
 ### Scheduler
@@ -58,20 +51,28 @@ Paste next line:
 `bash /app/vendor/backup.sh`
 and configure FREQUENCY.
 
-### Doesn't work?
+## One-time runs
+
+You can run the backup task as a one-time task:
+
+```
+$ heroku run bash /app/vendor/backup.sh --app <your_app>
+```
+
+## Doesn't work?
 In case if scheduler doesn't run your task, check logs using this e.g.:
 ```
 $ heroku logs -t  --app <your_app> | grep 'backup.sh'
 $ heroku logs --ps scheduler.x --app <you_app>
 ```
 
-### Restoring
+## Restoring
 
 ```bash
 $ gpg --decrypt <encrypted_file>
 ```
 
-### Creating GPG key
+## Creating GPG key
 ```
 $ gpg --full-generate-key
 ```
