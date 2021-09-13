@@ -68,6 +68,11 @@ $ heroku logs --ps scheduler.x --app <you_app>
 
 ## Restoring
 
+Remember to delete the secret key again after use, both the temporary file for importing and from GPG `gpg --delete-secret-keys <key_id>`
+
+Save the secret key to a file.
+Import it `gpg --import <secret_key_file_name>`
+
 ```bash
 $ gpg --decrypt <encrypted_file>
 ```
