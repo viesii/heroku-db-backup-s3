@@ -99,3 +99,8 @@ $ gpg --armor --export <key_id>
 
 Copy your GPG key, beginning with -----BEGIN PGP PUBLIC KEY BLOCK----- and ending with -----END PGP PUBLIC KEY BLOCK-----.
 Create the DB_BACKUP_GPG_PUB_KEY and DB_BACKUP_GPG_PUB_KEY_ID config vars.
+
+Delete the private key from your system
+```
+$ gpg --delete-secret-keys <key_id>
+```
