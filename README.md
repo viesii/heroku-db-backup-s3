@@ -15,6 +15,8 @@ $ heroku config:add DB_BACKUP_GPG_PUB_KEY_ID=gpg_recipient --app <your_app>
 ```
 It uses `DATABASE_URL` as the database to be backed up.
 
+See below how to [create the GPG key](#creating-gpg-key)
+
 ### Add buildpack to your Heroku app
 ```
 heroku buildpacks:add --index 1 https://github.com/abtion/heroku-db-backup-s3 --app <your_app>
